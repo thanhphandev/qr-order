@@ -4,51 +4,10 @@ import { MenuItem } from "./components/MenuItem";
 import { useState } from "react";
 import { useCart } from "./hooks/useCart";
 import Cart from "./components/Cart/Cart";
+import { menuItems } from './hooks/mockData';
 
+const availableTables = Array.from({ length: 4 }, (_, i) => `Bàn ${i + 1}`);
 
-const menuItems = [
-  {
-    id: 1,
-    name: "Burger Bò Phô Mai",
-    description: "Burger bò tươi với lớp phô mai tan chảy",
-    price: 49000,
-    sizeAvailable: ['L', 'M', 'S'],
-    image: "https://www.espressoenglish.net/wp-content/uploads/2019/02/meal-2069021_640.jpg",
-  },
-  {
-    id: 2,
-    name: "Pizza",
-    description: "Burger bò tươi với lớp phô mai tan chảy",
-    price: 60000,
-    sizeAvailable: ['L', 'M'], // Fixed typo
-    image: "https://www.espressoenglish.net/wp-content/uploads/2019/02/meal-2069021_640.jpg",
-  },
-  {
-    id: 3,
-    name: "Bún bò huế",
-    description: "Burger bò tươi với lớp phô mai tan chảy",
-    price: 30000,
-    sizeAvailable: ['L', 'M'], // Fixed typo
-    image: "https://www.espressoenglish.net/wp-content/uploads/2019/02/meal-2069021_640.jpg",
-  },
-  {
-    id: 4,
-    name: "Burger Bò Phô Mai",
-    description: "Burger bò tươi với lớp phô mai tan chảy",
-    price: 49000,
-    sizeAvailable: ['L', 'M'], // Fixed typo
-    image: "https://www.espressoenglish.net/wp-content/uploads/2019/02/meal-2069021_640.jpg",
-  },
-  {
-    id: 5,
-    name: "Burger Bò Phô Mai",
-    description: "Burger bò tươi với lớp phô mai tan chảy",
-    price: 49000,
-    sizeAvailable: ['L', 'M'], // Fixed typo
-    image: "https://www.espressoenglish.net/wp-content/uploads/2019/02/meal-2069021_640.jpg",
-  },
-
-];
 
 export default function Home() {
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -72,7 +31,7 @@ export default function Home() {
           <MenuItem
             key={item.id}
             {...item}
-            onAddToCart={() => addToCart(item)}
+            onAddToCart={addToCart}
           />
         ))}
       </div>
@@ -81,6 +40,7 @@ export default function Home() {
         onUpdateQuantity={updateQuantity}
         onClose={() => setIsCartOpen(!isCartOpen)}
         isOpen={isCartOpen}
+        availableTables={availableTables}
       />
     </div>
   );

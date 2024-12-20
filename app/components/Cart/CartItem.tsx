@@ -4,7 +4,7 @@ import type { CartItemType } from '@/app/types/cart';
 
 interface CartItemProps {
     item: CartItemType;
-    onUpdateQuantity: (id: number, quantity: number) => void;
+    onUpdateQuantity: (id: string, quantity: number) => void;
 }
 
 export function CartItem({ item, onUpdateQuantity }: CartItemProps) {
@@ -18,10 +18,10 @@ export function CartItem({ item, onUpdateQuantity }: CartItemProps) {
                 />
                 <div>
                     <h3 className="font-medium">{item.name}</h3>
+                    {item.size && <span className="text-sm text-gray-500">{item.size}</span>}
                     <p className="text-gray-600">
                         {item.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                     </p>
-
                 </div>
             </div>
             <div className="flex items-center gap-2">

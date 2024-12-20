@@ -10,18 +10,39 @@ export const MenuItem: React.FC<MenuItemType> = ({
   name,
   description,
   price,
-  sizeAvailable,
+  pricePerSize,
   image,
-  onAddToCart,
-}) => {
+  status,
+  onAddToCart
+}: MenuItemType) => {
   const [isFavorite, setIsFavorite] = useState(false);
+  const [selectedSize, setSelectedSize] = useState<string | null>(
+    pricePerSize?.length ? pricePerSize[0].size : null
+  );
+  
+  const currentPrice = pricePerSize?.length
+    ? pricePerSize.find(p => p.size === selectedSize)?.price
+    : price;
+
+  const handleAddToCart = () => {
+    const selectedPrice = pricePerSize?.find(p => p.size === selectedSize)?.price ?? price;
+    const itemToAdd = {
+      id: `${id}-${selectedSize || ''}`,
+      name,
+      size: selectedSize ?? pricePerSize?.[0]?.size,
+      price: selectedPrice,
+      image,
+    };
+    onAddToCart(itemToAdd);
+};
+
   const handleViewDetails = () => {
     alert('Xem chi tiết sản phẩm');
-  }
+  };
+
   return (
     <div
-      className="
-        relative 
+      className="relative 
         bg-white 
         rounded-2xl 
         shadow-lg 
@@ -44,45 +65,15 @@ export const MenuItem: React.FC<MenuItemType> = ({
         {/* Favorite Button */}
         <button
           onClick={() => setIsFavorite(!isFavorite)}
-          className="
-            absolute 
-            top-3 
-            right-3 
-            bg-white/80 
-            rounded-full 
-            p-2 
-            shadow-md 
-            hover:bg-white 
-            transition-colors
-          "
+          className="absolute top-3 right-3 bg-white/80 rounded-full p-2 shadow-md hover:bg-white transition-colors"
         >
           <Heart
-            className={`
-              w-5 h-5 
-              ${isFavorite
-                ? 'text-red-500 fill-red-500'
-                : 'text-gray-600'}
-            `}
+            className={`w-5 h-5 ${isFavorite ? 'text-red-500 fill-red-500' : 'text-gray-600'}`}
           />
         </button>
-
-        {/* Badge for size availability */}
-        {sizeAvailable.length > 0 && (
-          <div
-            className="
-              absolute 
-              bottom-3 
-              left-3 
-              bg-white/80 
-              px-2 
-              py-1 
-              rounded-full 
-              text-xs 
-              font-medium 
-              text-gray-700
-            "
-          >
-            {sizeAvailable.join(' / ')}
+        {status && (
+          <div className="absolute bottom-3 left-3 px-3 py-1 bg-orange-500 text-white text-sm font-medium rounded-full">
+            {status}
           </div>
         )}
       </div>
@@ -94,28 +85,34 @@ export const MenuItem: React.FC<MenuItemType> = ({
             {name}
           </h3>
           <span className="text-green-600 font-semibold text-base">
-            {price.toLocaleString()}đ
+            {currentPrice?.toLocaleString()}đ
           </span>
         </div>
 
         <p className="text-sm text-gray-500 line-clamp-2">{description}</p>
 
-        {/* Add to Cart Button */}
+        {pricePerSize && pricePerSize.length > 0 && (
+          <div className="flex gap-2">
+            {pricePerSize.map(({ size, price }) => (
+              <button
+                key={size}
+                onClick={() => setSelectedSize(size)}
+                className={`px-3 py-1 rounded-full text-sm font-medium transition-all ${
+                  selectedSize === size
+                    ? 'bg-orange-500 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                {size}
+              </button>
+            ))}
+          </div>
+        )}
+
         <div className="mt-4 flex justify-between items-center">
           <button
-            onClick={() => onAddToCart({ id, name, price, image })}
-            className="
-              flex items-center justify-center 
-              bg-orange-500 
-              text-white 
-              px-4 
-              py-2 
-              rounded-full 
-              hover:bg-orange-600 
-              transition-colors 
-              space-x-2 
-              w-full
-            "
+            onClick={handleAddToCart}
+            className="flex items-center justify-center bg-orange-500 text-white px-4 py-2 rounded-full hover:bg-orange-600 transition-colors space-x-2 w-full"
           >
             <Plus className="w-5 h-5" />
             <span>Thêm vào giỏ</span>

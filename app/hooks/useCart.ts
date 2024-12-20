@@ -24,19 +24,24 @@ export function useCart() {
     Cookies.set(CART_COOKIE_KEY, JSON.stringify(cartItems), { expires: 7 }); // Lưu trong 7 ngày
   }, [cartItems]);
 
-  const addToCart = (item: {id: number; name: string; price: number; image: string}) => {
-    setCartItems(prev => {
-      const existing = prev.find(i => i.id === item.id);
-      if (existing) {
-        return prev.map(i =>
-          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-        );
-      }
-      return [...prev, { ...item, quantity: 1 }];
-    });
-  };
+ const addToCart = (item: { id: string; name: string; size?: string; price: number; image: string }) => {
+  setCartItems(prev => {
+    const existing = prev.find(
+      i => i.id === item.id && (i.size === item.size || (!i.size && !item.size))
+    );
+    if (existing) {
+      return prev.map(i =>
+        i.id === item.id && i.size === item.size
+          ? { ...i, quantity: i.quantity + 1 }
+          : i
+      );
+    }
+    return [...prev, { ...item, quantity: 1 }];
+  });
+};
 
-  const updateQuantity = (id: number, quantity: number) => {
+
+  const updateQuantity = (id: string, quantity: number) => {
     setCartItems(prev =>
       quantity === 0
         ? prev.filter(item => item.id !== id)
