@@ -29,7 +29,7 @@ export interface PricePerSize {
         { size: "M", price: 120000 },
         { size: "L", price: 150000 }
       ],
-      status: "available",
+      status: "out_of_stock",
       image: "https://www.espressoenglish.net/wp-content/uploads/2019/02/meal-2069021_640.jpg",
       additionalImages: ["https://www.espressoenglish.net/wp-content/uploads/2019/02/meal-2069021_640.jpg"]
     },
@@ -44,7 +44,7 @@ export interface PricePerSize {
         { size: "Regular", price: 85000 },
         { size: "Large", price: 100000 }
       ],
-      status: "available",
+      status: "inactive",
       image: "https://www.espressoenglish.net/wp-content/uploads/2019/02/meal-2069021_640.jpg",
       additionalImages: []
     },

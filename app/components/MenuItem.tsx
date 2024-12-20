@@ -19,7 +19,7 @@ export const MenuItem: React.FC<MenuItemType> = ({
   const [selectedSize, setSelectedSize] = useState<string | null>(
     pricePerSize?.length ? pricePerSize[0].size : null
   );
-  
+
   const currentPrice = pricePerSize?.length
     ? pricePerSize.find(p => p.size === selectedSize)?.price
     : price;
@@ -34,7 +34,7 @@ export const MenuItem: React.FC<MenuItemType> = ({
       image,
     };
     onAddToCart(itemToAdd);
-};
+  };
 
   const handleViewDetails = () => {
     alert('Xem chi tiết sản phẩm');
@@ -71,11 +71,12 @@ export const MenuItem: React.FC<MenuItemType> = ({
             className={`w-5 h-5 ${isFavorite ? 'text-red-500 fill-red-500' : 'text-gray-600'}`}
           />
         </button>
-        {status && (
+        {status !== 'available' && (
           <div className="absolute bottom-3 left-3 px-3 py-1 bg-orange-500 text-white text-sm font-medium rounded-full">
-            {status}
+            {status === 'out_of_stock' ? "Hết hàng" : status === 'inactive' ? 'Ngừng kinh doanh' : null}
           </div>
         )}
+
       </div>
 
       {/* Product Details */}
@@ -97,11 +98,10 @@ export const MenuItem: React.FC<MenuItemType> = ({
               <button
                 key={size}
                 onClick={() => setSelectedSize(size)}
-                className={`px-3 py-1 rounded-full text-sm font-medium transition-all ${
-                  selectedSize === size
+                className={`px-3 py-1 rounded-full text-sm font-medium transition-all ${selectedSize === size
                     ? 'bg-orange-500 text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
+                  }`}
               >
                 {size}
               </button>
