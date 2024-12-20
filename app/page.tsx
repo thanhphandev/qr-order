@@ -6,6 +6,7 @@ import { useCart } from "./hooks/useCart";
 import Cart from "./components/Cart/Cart";
 import { menuItems } from './hooks/mockData';
 
+
 const availableTables = Array.from({ length: 4 }, (_, i) => `Bàn ${i + 1}`);
 
 

@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { Plus, Heart } from 'lucide-react';
 import { useState } from 'react';
 import type { MenuItemType } from '../types/menuItem';
+import toast from 'react-hot-toast';
 
 export const MenuItem: React.FC<MenuItemType> = ({
   id,
@@ -34,6 +35,7 @@ export const MenuItem: React.FC<MenuItemType> = ({
       image,
     };
     onAddToCart(itemToAdd);
+    toast.success('Đã thêm một món vào giỏ hàng')
   };
 
   const handleViewDetails = () => {
@@ -109,7 +111,7 @@ export const MenuItem: React.FC<MenuItemType> = ({
           </div>
         )}
 
-        <div className="mt-4 flex justify-between items-center">
+        {status == 'available' && <div className="mt-4 flex justify-between items-center">
           <button
             onClick={handleAddToCart}
             className="flex items-center justify-center bg-orange-500 text-white px-4 py-2 rounded-full hover:bg-orange-600 transition-colors space-x-2 w-full"
@@ -117,7 +119,7 @@ export const MenuItem: React.FC<MenuItemType> = ({
             <Plus className="w-5 h-5" />
             <span>Thêm vào giỏ</span>
           </button>
-        </div>
+        </div>}
       </div>
     </div>
   );
