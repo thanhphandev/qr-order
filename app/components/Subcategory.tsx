@@ -8,9 +8,9 @@ interface SubCategoryListProps {
 export function SubCategoryList({ subCategories }: SubCategoryListProps) {
   if (subCategories.length === 0) return null;
 
-  const [selectedSubcategory, setSelectedSubcategory] = useState<number | null>(null);
+  const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(null);
 
-  const handleClickSubcategory = (subcategoryId: number) => {
+  const handleClickSubcategory = (subcategoryId: string) => {
     setSelectedSubcategory(subcategoryId);
   };
 

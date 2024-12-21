@@ -5,18 +5,20 @@ import { useState } from "react";
 import { useCart } from "./hooks/useCart";
 import Cart from "./components/Cart/Cart";
 import { menuItems } from './hooks/mockData';
+import { CategoryBar } from "./components/CategoryBar";
+import Header from "./components/Header";
 
 
 const availableTables = Array.from({ length: 4 }, (_, i) => `Bàn ${i + 1}`);
-
 
 export default function Home() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const { cartItems, addToCart, updateQuantity } = useCart()
 
-
   return (
-    <div className="min-h-screen bg-gray-50">
+    <>
+      <Header />
+      <CategoryBar />
       <div
         className="
           grid 
@@ -43,6 +45,6 @@ export default function Home() {
         isOpen={isCartOpen}
         availableTables={availableTables}
       />
-    </div>
+    </>
   );
 }

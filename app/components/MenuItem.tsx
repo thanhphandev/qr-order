@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { Plus, Heart } from 'lucide-react';
 import { useState } from 'react';
 import type { MenuItemType } from '../types/menuItem';
+import { useFavorites } from '../hooks/useFavorites';
 import toast from 'react-hot-toast';
 
 export const MenuItem: React.FC<MenuItemType> = ({
@@ -16,7 +17,7 @@ export const MenuItem: React.FC<MenuItemType> = ({
   status,
   onAddToCart
 }: MenuItemType) => {
-  const [isFavorite, setIsFavorite] = useState(false);
+  const { isFavorite, toggleFavorite, } = useFavorites();
   const [selectedSize, setSelectedSize] = useState<string | null>(
     pricePerSize?.length ? pricePerSize[0].size : null
   );
@@ -66,13 +67,21 @@ export const MenuItem: React.FC<MenuItemType> = ({
         />
         {/* Favorite Button */}
         <button
-          onClick={() => setIsFavorite(!isFavorite)}
+          onClick={() => {
+            toggleFavorite(id);
+            toast.success(
+              isFavorite(id)
+                ? "Đã xóa khỏi danh sách yêu thích!"
+                : "Đã thêm vào danh sách yêu thích!"
+            );
+          }}
           className="absolute top-3 right-3 bg-white/80 rounded-full p-2 shadow-md hover:bg-white transition-colors"
         >
           <Heart
-            className={`w-5 h-5 ${isFavorite ? 'text-red-500 fill-red-500' : 'text-gray-600'}`}
+            className={`w-5 h-5 ${isFavorite(id) ? 'text-red-500 fill-red-500' : 'text-gray-600'}`}
           />
         </button>
+
         {status !== 'available' && (
           <div className="absolute bottom-3 left-3 px-3 py-1 bg-orange-500 text-white text-sm font-medium rounded-full">
             {status === 'out_of_stock' ? "Hết hàng" : status === 'inactive' ? 'Ngừng kinh doanh' : null}
@@ -101,8 +110,8 @@ export const MenuItem: React.FC<MenuItemType> = ({
                 key={size}
                 onClick={() => setSelectedSize(size)}
                 className={`px-3 py-1 rounded-full text-sm font-medium transition-all ${selectedSize === size
-                    ? 'bg-orange-500 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-orange-500 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
               >
                 {size}
