@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Landing Page
 
-## Getting Started
+1. Menu
+filter category
+search menuitem
+cart
+Favorite
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+No SEO
+2. Admin Panel
+CRUD Catgegory
+CRUD MenuItem
+Realtime Get Order
+Order Manager
+Printer
+QR Customer
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+URL
+/ Landing Page
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+/menu
+/menu/[id]
+/menu?table=<id>
+/orders/history
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+Admin Panel
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+/admin: Dashboard chính (hiển thị tổng quan). return login page if has no session
+/admin/login
+/admin/categories: Quản lý danh mục món ăn.
+/admin/menu-items: Quản lý món ăn.
+/admin/orders: Quản lý đơn hàng.
+/admin/statistics: Thống kê doanh thu và món ăn yêu thích.
+/admin/qr-generator
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+/orders
+/orders/[id]
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+/menu?category=<id>

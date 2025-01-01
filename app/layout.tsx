@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Header from "./components/Header";
-import { CategoryBar } from "./components/CategoryBar";
+import { SessionProvider } from 'next-auth/react';
 import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
@@ -35,7 +34,9 @@ export default function RootLayout({
           position="top-right"
           reverseOrder={false}
         />
-        {children}
+        <SessionProvider>
+          {children}
+        </SessionProvider>
       </body>
     </html>
   );

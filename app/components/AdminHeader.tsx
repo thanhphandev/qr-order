@@ -2,10 +2,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Bell, Settings, Menu, LogOut } from 'lucide-react';
+import { logout } from '@/app/actions/user';
+
 interface AdminHeaderProps {
-    onMenuClick: () => void
+  onMenuClick: () => void
 }
-const AdminHeader = ({onMenuClick}: AdminHeaderProps) => {
+const AdminHeader = ({ onMenuClick }: AdminHeaderProps) => {
   const notifications = 3;
 
   return (
@@ -17,14 +19,14 @@ const AdminHeader = ({onMenuClick}: AdminHeaderProps) => {
           </button>
 
           <div className="flex items-center space-x-2">
-            <motion.button 
+            <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="relative p-2 hover:bg-orange-50 rounded-lg transition-colors duration-200"
             >
               <Bell className="h-5 w-5 text-orange-600" />
               {notifications > 0 && (
-                <motion.span 
+                <motion.span
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   className="absolute top-1 right-1 h-4 w-4 bg-red-500 rounded-full text-xs text-white flex items-center justify-center"
@@ -33,8 +35,7 @@ const AdminHeader = ({onMenuClick}: AdminHeaderProps) => {
                 </motion.span>
               )}
             </motion.button>
-            
-            <motion.button 
+            <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="p-2 hover:bg-orange-50 rounded-lg transition-colors duration-200"
@@ -45,25 +46,24 @@ const AdminHeader = ({onMenuClick}: AdminHeaderProps) => {
             <div className="h-8 w-px bg-orange-200 mx-2"></div>
 
             <div className="flex items-center space-x-3">
-              <div className="flex flex-col items-end">
-                <span className="text-sm font-medium text-gray-700">Admin User</span>
-                <span className="text-xs text-gray-500">admin@swiftfood.com</span>
-              </div>
-              <motion.div 
+
+              <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="h-10 w-10 rounded-lg bg-orange-100 flex items-center justify-center cursor-pointer"
               >
-                <span className="text-sm font-medium text-orange-600">A</span>
+                A
               </motion.div>
             </div>
-
-            <motion.button 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="p-2 hover:bg-red-50 rounded-lg transition-colors duration-200 ml-2"
-            >
-              <LogOut className="h-5 w-5 text-red-500" />
-            </motion.button>
+            <form action={logout}>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="p-2 hover:bg-red-50 rounded-lg transition-colors duration-200 ml-2"
+                type="submit"
+              >
+                <LogOut className="h-5 w-5 text-red-500" />
+              </motion.button>
+            </form>
           </div>
         </div>
       </div>

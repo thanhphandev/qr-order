@@ -2,7 +2,9 @@
 import AdminHeader from '@/app/components/AdminHeader';
 import Sidebar from '@/app/components/Sidebar';
 import React, { useState, useCallback } from 'react';
-
+import {
+  ClerkProvider,
+} from '@clerk/nextjs'
 
 interface LayoutProps {
   children: React.ReactNode;

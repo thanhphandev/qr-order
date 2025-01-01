@@ -14,6 +14,6 @@ export type MenuItemType = {
   status: "available" | "out_of_stock" | "inactive";
   image: string;
   additionalImages?: string[];
-  onAddToCart: (item: { id: string; name: string; size?: string, price: number; image: string }) => void;
+  onAddCart: (item: { id: string; name: string; size?: string; price: number; image: string }) => void
 }
 

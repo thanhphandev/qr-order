@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
 import Image from 'next/image';
 import { Plus, Heart } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { MenuItemType } from '../types/menuItem';
-import { useFavorites } from '../hooks/useFavorites';
+import useFavoritesStore from '../hooks/useFavorites';
 import toast from 'react-hot-toast';
 
 export const MenuItem: React.FC<MenuItemType> = ({
@@ -15,18 +15,26 @@ export const MenuItem: React.FC<MenuItemType> = ({
   pricePerSize,
   image,
   status,
-  onAddToCart
+  onAddCart,
 }: MenuItemType) => {
-  const { isFavorite, toggleFavorite, } = useFavorites();
+  const { isFavorite, toggleFavorite } = useFavoritesStore();
+
   const [selectedSize, setSelectedSize] = useState<string | null>(
     pricePerSize?.length ? pricePerSize[0].size : null
   );
+  const [isHydrated, setIsHydrated] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // Loading state
+
+  useEffect(() => {
+    setIsHydrated(true); // Hydrate on client
+  }, []);
 
   const currentPrice = pricePerSize?.length
     ? pricePerSize.find(p => p.size === selectedSize)?.price
     : price;
 
   const handleAddToCart = () => {
+    setIsLoading(true); // Show loading spinner when adding to cart
     const selectedPrice = pricePerSize?.find(p => p.size === selectedSize)?.price ?? price;
     const itemToAdd = {
       id: `${id}-${selectedSize || ''}`,
@@ -35,35 +43,32 @@ export const MenuItem: React.FC<MenuItemType> = ({
       price: selectedPrice,
       image,
     };
-    onAddToCart(itemToAdd);
-    toast.success('Đã thêm một món vào giỏ hàng')
+    onAddCart(itemToAdd);
+    toast.success('Đã thêm một món vào giỏ hàng');
+    setIsLoading(false); // Hide loading spinner after action
   };
 
   const handleViewDetails = () => {
     alert('Xem chi tiết sản phẩm');
   };
 
+  if (!isHydrated) return null; // Only render after hydration
+
   return (
     <div
-      className="relative 
-        bg-white 
-        rounded-2xl 
-        shadow-lg 
-        overflow-hidden 
-        transition-all 
-        duration-300 
-        hover:shadow-xl 
-        hover:-translate-y-1
-        border border-gray-100
-      "
+      className="relative bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border border-gray-100"
     >
       {/* Product Image */}
       <div className="relative w-full h-48 overflow-hidden">
+        {/* Skeleton loader or placeholder image */}
+        <div className={`absolute inset-0 bg-gray-300 animate-pulse ${isLoading ? 'opacity-100' : 'opacity-0'}`} />
         <Image
           src={image}
           alt={name}
           fill
-          className="object-cover transition-transform duration-300 hover:scale-110" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="object-cover transition-transform duration-300 hover:scale-110"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          onLoadingComplete={() => setIsLoading(false)} // Image load complete
         />
         {/* Favorite Button */}
         <button
@@ -71,8 +76,8 @@ export const MenuItem: React.FC<MenuItemType> = ({
             toggleFavorite(id);
             toast.success(
               isFavorite(id)
-                ? "Đã xóa khỏi danh sách yêu thích!"
-                : "Đã thêm vào danh sách yêu thích!"
+                ? "Đã Thêm khỏi danh sách yêu thích!"
+                : "Đã xóa khỏi danh sách yêu thích!"
             );
           }}
           className="absolute top-3 right-3 bg-white/80 rounded-full p-2 shadow-md hover:bg-white transition-colors"
@@ -87,7 +92,6 @@ export const MenuItem: React.FC<MenuItemType> = ({
             {status === 'out_of_stock' ? "Hết hàng" : status === 'inactive' ? 'Ngừng kinh doanh' : null}
           </div>
         )}
-
       </div>
 
       {/* Product Details */}
@@ -109,10 +113,11 @@ export const MenuItem: React.FC<MenuItemType> = ({
               <button
                 key={size}
                 onClick={() => setSelectedSize(size)}
-                className={`px-3 py-1 rounded-full text-sm font-medium transition-all ${selectedSize === size
-                  ? 'bg-orange-500 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
+                className={`px-3 py-1 rounded-full text-sm font-medium transition-all ${
+                  selectedSize === size
+                    ? 'bg-orange-500 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
               >
                 {size}
               </button>
@@ -120,15 +125,24 @@ export const MenuItem: React.FC<MenuItemType> = ({
           </div>
         )}
 
-        {status == 'available' && <div className="mt-4 flex justify-between items-center">
-          <button
-            onClick={handleAddToCart}
-            className="flex items-center justify-center bg-orange-500 text-white px-4 py-2 rounded-full hover:bg-orange-600 transition-colors space-x-2 w-full"
-          >
-            <Plus className="w-5 h-5" />
-            <span>Thêm vào giỏ</span>
-          </button>
-        </div>}
+        {status == 'available' && (
+          <div className="mt-4 flex justify-between items-center">
+            <button
+              onClick={handleAddToCart}
+              className={`flex items-center justify-center ${isLoading ? 'bg-gray-300 cursor-not-allowed' : 'bg-orange-500 hover:bg-orange-600'} text-white px-4 py-2 rounded-full transition-colors space-x-2 w-full`}
+              disabled={isLoading} // Disable button during loading
+            >
+              {isLoading ? (
+                <div className="w-5 h-5 border-4 border-t-4 border-white rounded-full animate-spin" />
+              ) : (
+                <>
+                  <Plus className="w-5 h-5" />
+                  <span>Thêm vào giỏ</span>
+                </>
+              )}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

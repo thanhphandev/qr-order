@@ -1,24 +1,17 @@
 'use client'
 
 import { MenuItem } from "./components/MenuItem";
-import { useState } from "react";
 import { useCart } from "./hooks/useCart";
 import Cart from "./components/Cart/Cart";
 import { menuItems } from './hooks/mockData';
-import { CategoryBar } from "./components/CategoryBar";
-import Header from "./components/Header";
+import MenuProvider from "./MenuProvider";
 
-
-const availableTables = Array.from({ length: 4 }, (_, i) => `Bàn ${i + 1}`);
+const availableTables = Array.from({ length: 10 }, (_, i) => `${i + 1}`);
 
 export default function Home() {
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const { cartItems, addToCart, updateQuantity } = useCart()
-
+  const { addToCart, cartItems, updateQuantity } = useCart()
   return (
-    <>
-      <Header />
-      <CategoryBar />
+    <MenuProvider>
       <div
         className="
           grid 
@@ -33,18 +26,18 @@ export default function Home() {
         {menuItems.map((item) => (
           <MenuItem
             key={item.id}
-            {...item}
-            onAddToCart={addToCart}
+            {...item
+            }
+            onAddCart={addToCart}
           />
         ))}
       </div>
       <Cart
         items={cartItems}
         onUpdateQuantity={updateQuantity}
-        onClose={() => setIsCartOpen(!isCartOpen)}
-        isOpen={isCartOpen}
         availableTables={availableTables}
       />
-    </>
+
+    </MenuProvider>
   );
 }
